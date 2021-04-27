@@ -1,0 +1,171 @@
+install.packages()
+install.packages
+install.packages()
+ls()
+?plot
+install.packages()
+install.package()
+install.packages()
+hi <- "Hello world!"
+hi
+?read.csv
+setwd("~/Documents/sade2021/week3")
+polyg <- readOGR(dsn="england", layer="england_historic")
+library(rgdal)#
+library(raster)#
+library(spatstat)#
+library(maptools)#
+library(GISTools)
+polyg <- readOGR(dsn="england", layer="england_historic")
+plot(polyg)#
+sites <- readOGR(dsn="sites/sites.shp", layer="sites")#
+oxford <- readOGR(dsn="oxford/oxford.shp", layer="oxford")#
+points(oxford, pch=15, col="red")
+points(oxford, pch=15, border=”black”, col="red", cex=2)
+points(oxford, pch=15, border="black", col="red", cex=2)
+points(oxford, pch=15, col="red", cex=2)
+points(sites, pch=19, cex=0.3)#
+points(oxford, col="orangered", pch=15)
+points(sites)
+tmp <- rbind(coordinates(sites), coordinates(oxford))#
+dtmp <- as.matrix(dist(tmp))#
+sites$distox <- dtmp[31,1:30]
+plot(sites$distox,sites$oxpots)
+res <- lm(sites$oxpots ~ sites$distox)#
+abline(res, col="red")
+summary(res)
+res$sigma
+sites$sr <- residuals(res) / summary(res)$sigma
+points(sites[sites$sr >=-3 & sites$sr <=0,], pch=1, cex=1, col="blue")#
+points(sites[sites$sr >=0 & sites$sr <=2,], pch=1, cex=1, col="red")#
+points(oxford, col="orangered", pch=15)
+dev.new(device=pdf)#
+plot(polyg)#
+points(oxford, pch=15, col="red", cex=2)#
+points(sites[sites$sr >=-3 & sites$sr <=0,], pch=1, cex=1, col="blue")#
+points(sites[sites$sr >=0 & sites$sr <=2,], pch=1, cex=1, col="red")#
+points(oxford, col="orangered", pch=15)
+plot(sites$distox,sites$sr)
+head(sites)
+plot(sites$distox,sites$sr, labels(sites$site_name))
+plot(sites$distox,sites$sr, labels(site_name))
+plot(sites$distox,sites$sr, labels=sites$site_name)
+plot(sites$distox,sites$sr)
+?geom_text
+install.packages()
+text(sites$dist0x, sites$sr, labels=sites$site_name, cex= 0.7)
+text(sites$dist0x, sites$sr, labels=sites$site_name, cex= 0.7)
+text(your.vector, labels=your.labels, cex= labels.size, pos=labels.position)
+zz <- text(your.vector, labels=your.labels, cex= labels.size, pos=labels.position)
+zz <- plot(sites$distox,sites$sr, labels(sites$site_name))
+zz <- plot(sites$distox,sites$sr)
+zz
+plot(zz)
+dev.new(device=pdf)#
+plot(polyg)#
+points(oxford, pch=15, col="red", cex=2)#
+points(sites[sites$sr >=-3 & sites$sr <=-2,], pch=3, cex=1, col="blue")#
+points(sites[sites$sr >=-2 & sites$sr <=-1,], pch=2, cex=1, col="blue")#
+points(sites[sites$sr >=-1 & sites$sr <=0,], pch=1, cex=1, col="blue")#
+points(sites[sites$sr >=0 & sites$sr <=1,], pch=1, cex=1, col="red")#
+points(sites[sites$sr >=1 & sites$sr <=2,], pch=2, cex=1, col="red")#
+points(oxford, col="orangered", pch=15)
+plot(polyg)#
+points(oxford, pch=15, col="red", cex=2)#
+points(sites[sites$sr >=-3 & sites$sr <=-2,], pch=1, cex=3, col="blue")#
+points(sites[sites$sr >=-2 & sites$sr <=-1,], pch=1, cex=2, col="blue")#
+points(sites[sites$sr >=-1 & sites$sr <=0,], pch=1, cex=1, col="blue")#
+points(sites[sites$sr >=0 & sites$sr <=1,], pch=1, cex=1, col="red")#
+points(sites[sites$sr >=1 & sites$sr <=2,], pch=1, cex=2, col="red")#
+points(oxford, col="orangered", pch=15)
+plot(polyg)#
+points(oxford, pch=15, cex=2)#
+points(sites[sites$sr >=-3 & sites$sr <=-2,], pch=1, cex=3, col="blue")#
+points(sites[sites$sr >=-2 & sites$sr <=-1,], pch=1, cex=2, col="blue")#
+points(sites[sites$sr >=-1 & sites$sr <=0,], pch=1, cex=1, col="blue")#
+points(sites[sites$sr >=0 & sites$sr <=1,], pch=1, cex=1, col="red")#
+points(sites[sites$sr >=1 & sites$sr <=2,], pch=1, cex=2, col="red")#
+points(oxford, col="orangered", pch=15)
+plot(polyg)#
+points(oxford, pch=15, cex=2)#
+points(sites[sites$sr >=-3 & sites$sr <=-2,], pch=1, cex=3, col="blue")#
+points(sites[sites$sr >=-2 & sites$sr <=-1,], pch=1, cex=2, col="blue")#
+points(sites[sites$sr >=-1 & sites$sr <=0,], pch=1, cex=1, col="blue")#
+points(sites[sites$sr >=0 & sites$sr <=1,], pch=1, cex=1, col="red")#
+points(sites[sites$sr >=1 & sites$sr <=2,], pch=1, cex=2, col="red")
+plot(sites$distox,sites$oxpots)#
+res <- lm(sites$oxpots ~ sites$distox)#
+abline(res, col="red")
+plot(sites$distox,sites$sr)
+residuals(res)
+summary(res)
+class(sites)
+head(oxford)
+head(sites, n=33)
+head(sites)
+head(sites, n=30)
+sites$id <- sites$cat
+head(sites, n=30)
+sites$cat <- NULL
+head(sites, n=30)
+sites$Id <- NULL
+sites$transport <- NULL
+sites$distox <- NULL
+sites$sr <- NULL
+head(sites, n=30)
+sites$oxpots <- NULL
+head(sites, n=30)
+sites <- readOGR(dsn="sites/sites.shp", layer="sites")
+head(sites, n=30)
+sites$nfpots <- NULL
+sites$transport <- NULL
+sites$Id <- NULL
+sites$id <- sites$cat
+sites$cat <- NULL
+head(sites, n=30)
+writeOGR(obj=sites, dsn="pottery_sites", layer="_pottery_sites", driver="ESRI Shapefile")
+sites <- readOGR(dsn="pottery_sites", layer="pottery_sites")
+writeOGR(obj=sites, dsn="pottery_sites", layer="pottery_sites", driver="ESRI Shapefile")
+rm(sites)
+sites <- readOGR(dsn="pottery_sites", layer="pottery_sites")
+sites
+head(sites, n=30)
+distance <- rbind(coordinates(sites), coordinates(oxford))
+distance
+dtmp <- as.matrix(dist(tmp))
+dtmp
+dist(tmp)
+?rbind
+coordinates(sites)
+tmp
+coords <- rbind(coordinates(sites), coordinates(oxford))#
+d_matrix <- as.matrix(dist(coords))#
+sites$distox <- d_matrix[31,1:30]
+d_matrix
+sites$distox
+head(sites, n=30)
+plot(sites$distox,sites$oxpots)
+?lm
+?lm
+res <- lm(sites$oxpots ~ sites$distox)#
+abline(res, col="red")
+summary(res)
+sites$sr <- residuals(res) / summary(res)$sigma#
+plot(sites$distox,sites$sr)
+mean(sites$oxpots)sd(sites$oxpots)
+plot(sites$distox,sites$sr)
+sites$sr <- residuals(res) / summary(res)$sigma
+plot(sites$distox,sites$sr)
+boxplot(sites$sr)
+dev.new(device=pdf, width=8, height=4)#
+par(mfrow=c(1,2))#
+boxplot(sites$sr)#
+plot(sites$distox,sites$sr)
+dev.new(device=pdf)#
+plot(polyg)#
+points(oxford, pch=15, cex=2)#
+points(sites[sites$sr >=-3 & sites$sr <=-2,], pch=1, cex=3, col="blue")#
+points(sites[sites$sr >=-2 & sites$sr <=-1,], pch=1, cex=2, col="blue")#
+points(sites[sites$sr >=-1 & sites$sr <=0,], pch=1, cex=1, col="blue")#
+points(sites[sites$sr >=0 & sites$sr <=1,], pch=1, cex=1, col="red")#
+points(sites[sites$sr >=1 & sites$sr <=2,], pch=1, cex=2, col="red")
