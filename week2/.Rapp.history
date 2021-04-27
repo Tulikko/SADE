@@ -1,157 +1,0 @@
-install.packages()
-install.packages
-install.packages()
-ls()
-?plot
-install.packages()
-install.package()
-install.packages()
-hi <- "Hello world!"
-hi
-?read.csv
-setwd("~/Documents/sade2021/week2")
-column1 <- c("a","b","c","d","e")#
-column2 <- c(1,2,3,4,5)#
-column3 <- c(6:10)
-example <- data.frame(column1, column2, column3)
-example
-example[2,3]
-example[4,]#
-example [,2]
-new_object <- example[4,]#
-new_object
-class(new_object)
-new_object <- example[4:5,]#
-new_object
-new_object <- example[3:5,]#
-new_object
-library(rgdal)#
-library(raster)#
-library(spatstat)#
-library(maptools)
-polyg <- readOGR(dsn="englandwales", layer="engwales_simple")
-?readOGR
-dem <- raster("dem/engwales_dem.tif")#
-plot(polyg)#
-plot(dem, add=T)
-plot(dem, add=T, col=terrain.colors(10))
-plot(dem, add=T, col=terrain.colors(3))
-markets <- readOGR(dsn="markets1334", layer="markets1334")#
-points(markets, pch=19, cex=0.2)
-class(markets)
-head(markets, n=10)
-head(markets, n=10)
-markets <- spTransform(markets, CRS(proj4string(polyg)))
-markets <- markets[polyg, ]
-sp_markets <- as.ppp(coordinates(markets),as.owin(polyg))
-dens <- density(sp_markets, sigma=10000, edge=TRUE, eps=500)#
-plot(dens)
-bw.diggle(sp_markets)
-plot(dens, col=heat.colors(10))#
-points(markets, pch=19, cex=0.2)
-head(markets, n=20)
-summary(markets$VAL_1334)
-dens_weighted <- density(sp_markets, sigma=10000, weights=markets$VAL_1334, edge=TRUE, eps=500)#
-plot(dens_weighted, col=heat.colors(10))#
-points(markets, pch=19, cex=0.2)
-boxplot(markets$VAL_1334)
-hist(markets$VAL_1334)
-boxplot.stats(markets$VAL_1334)
-markets_major <- subset(markets_save, VAL_1334 > 220)#
-markets[markets$VAL_1334 > 220] = 0
-markets <- readOGR(dsn="markets1334", layer="markets1334")#
-points(markets, pch=19, cex=0.2)
-markets <- spTransform(markets, CRS(proj4string(polyg)))
-markets <- markets[polyg, ]
-markets_major <- subset(markets, VAL_1334 > 220)
-markets[markets$VAL_1334 > 220] = 0
-dens_weighted <- density(sp_markets, sigma=10000, weights=markets$VAL_1334, edge=TRUE, eps=500)#
-dev.new(device=pdf, height=6, width=12)#
-par(mfrow=c(1,2), mai=c(0.5, 0.5, 0.5, 0.5)) #
-plot(dens, col=topo.colors(50))#
-points(markets, pch=19, cex=0.1)#
-plot(dens_weighted, col=topo.colors(50))#
-points(markets, pch=19, cex=0.1)#
-points(markets_major, pch=15, cex=0.7, col="red")
-markets1334 <- markets#
-sp_markets1334 <- sp_markets
-markets <- subset(markets, DEFYR<1251)#
-sp_markets <- as.ppp(coordinates(markets),as.owin(polyg))
-earlier <- as.ppp(coordinates(markets[markets$by1200=="1", ]),as.owin(polyg))#
-later <- as.ppp(coordinates(markets[markets$by1200=="0", ]),as.owin(polyg))
-multit <- sp_markets
-marks(multit) <- as.factor(markets$by1200)
-head(markets)
-nrow(markets)
-head(markets1334)
-markets <- readOGR(dsn="markets1334", layer="markets1334")#
-points(markets, pch=19, cex=0.2)
-head(markets)
-markets[markets$VAL_1334 > 220] = 0
-head(markets)
-markets <- readOGR(dsn="markets1334", layer="markets1334")
-markets[markets$VAL_1334 > 220] <- 0
-markets <- readOGR(dsn="markets1334", layer="markets1334")
-subset(markets, VAL_1334 > 220) <- 220
-install.packages()
-library(anchors)
-replace.value(markets, VAL_1334, from=220, to=220
-markets <- readOGR(dsn="markets1334", layer="markets1334")
-replace.value(markets, VAL_1334, from=220, to=220)
-head(markets)
-replace.value(markets, markets$VAL_1334, from=220, to=220)
-head(markets)
-replace.value(markets, markets$VAL_1334, from=220:5000, to=220)
-markets <- readOGR(dsn="markets1334", layer="markets1334")
-markets <- spTransform(markets, CRS(proj4string(polyg)))
-markets <- markets[polyg, ]
-sp_markets <- as.ppp(coordinates(markets),as.owin(polyg))
-markets_major <- subset(markets, VAL_1334 > 220)
-head(markets_major)
-markets <- subset(markets, VAL_1334 < 220)#
-sp_markets <- as.ppp(coordinates(markets),as.owin(polyg))
-head(markets)
-dens_weighted <- density(sp_markets, sigma=10000, weights=markets$VAL_1334, edge=TRUE, eps=500)#
-dev.new(device=pdf, height=6, width=12)#
-par(mfrow=c(1,2), mai=c(0.5, 0.5, 0.5, 0.5)) #
-plot(dens, col=topo.colors(50))#
-points(markets, pch=19, cex=0.1)#
-plot(dens_weighted, col=topo.colors(50))#
-points(markets, pch=19, cex=0.1)#
-points(markets_major, pch=15, cex=0.7, col="red")
-polyg <- readOGR(dsn="englandwales", layer="engwales_simple")
-markets <- spTransform(markets, CRS(proj4string(polyg)))
-markets <- markets[polyg, ]
-markets_backup <- markets
-nrow(markets)
-summary(markets)
-markets <- subset(markets_backup, DEFYR<1251)#
-sp_markets <- as.ppp(coordinates(markets),as.owin(polyg))
-summary(markets)
-earlier <- as.ppp(coordinates(markets[markets$by1200=="1", ]),as.owin(polyg))#
-later <- as.ppp(coordinates(markets[markets$by1200=="0", ]),as.owin(polyg))
-multit <- sp_markets
-marks(multit) <- as.factor(markets$by1200)
-plot(multit)
-dens1250 <- density(sp_markets, sigma=15000, edge=TRUE, eps=500)#
-plot(dens1250, col=topo.colors(50))
-points(markets, pch=19, cex=0.2)
-rrs <- relrisk(multit, sigma=15000, edge=TRUE, eps=500)#
-rrs[as.matrix(dens1250)<(0.000000001)] <- NA#
-plot(polyg)#
-plot(rrs, col=rev(topo.colors(50)), add=T)#
-plot(multit, cex=0.3, add=T)
-plot(dens1250, col=topo.colors(50))
-dev.new(device=pdf, height=6, width=12)#
-par(mfrow=c(1,2), mai=c(0.5, 0.5, 0.5, 0.5))
-plot(dens1250, col=topo.colors(50))
-plot(rrs, col=rev(topo.colors(50)), add=T)
-nndist(sp_markets)
-hist(nndist(sp_markets), breaks=seq(0, 50000, 1000))#
-mean(nndist(sp_markets))
-summary(markets)
-market_events1250 <- subset(market_events, DEFYR<1251)#
-sp_market_events <- as.ppp(coordinates(market_events1250),as.owin(polyg))#
-hist(nndist(sp_market_events), breaks=seq(0, 50000, 1000))#
-mean(nndist(sp_market_events))#
-clarkevans.test(sp_market_events, corrections="none")
