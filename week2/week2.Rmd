@@ -39,6 +39,23 @@ points(markets, pch=19, cex=0.2)
 
 class(markets)
 head(markets, n=10)
+
+# Manipulating the data: 
+
+# Lets make sure that the two have the same coordinate reference system (CRS) by taking the polygon’s CRS and applying it to the markets.
+markets <- spTransform(markets, CRS(proj4string(polyg)))
+
+# Subsetting the markets within the polygon's area to drop out those that fall outside of its borders
+markets <- markets[polyg, ]
+
+# Markets are events rather than places - let's save the data that contains duplicates as "market_events" and then remove duplicates from "markets"
+market_events <- markets
+markets <- remove.duplicates(markets)
+
+# Creating spastat object from markets
+# sp_markets <- as.ppp(coordinates(markets), as.owin(polyg))
+
+
 ```
 
 ## Relative risk surface

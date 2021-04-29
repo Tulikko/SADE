@@ -651,6 +651,20 @@ markets &lt;- readOGR(dsn=&quot;markets1334&quot;, layer=&quot;markets1334&quot;
 ## 8   57      EXETER          DEVON   900       1   366.17      1
 ## 9  119     HALWELL          DEVON   900       1    13.50      1
 ## 10  29     LYDFORD          DEVON   900       1    11.67      1</code></pre>
+<pre class="r"><code># Manipulating the data: 
+
+# Lets make sure that the two have the same coordinate reference system (CRS) by taking the polygon’s CRS and applying it to the markets.
+markets &lt;- spTransform(markets, CRS(proj4string(polyg)))
+
+# Subsetting the markets within the polygon&#39;s area to drop out those that fall outside of its borders
+markets &lt;- markets[polyg, ]
+
+# Markets are events rather than places - let&#39;s save the data that contains duplicates as &quot;market_events&quot; and then remove duplicates from &quot;markets&quot;
+market_events &lt;- markets
+markets &lt;- remove.duplicates(markets)
+
+# Creating spastat object from markets
+# sp_markets &lt;- as.ppp(coordinates(markets), as.owin(polyg))</code></pre>
 </div>
 <div id="relative-risk-surface" class="section level2">
 <h2>Relative risk surface</h2>
