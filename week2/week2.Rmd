@@ -83,6 +83,13 @@ markets_major <- subset(markets, VAL_1334 > 205)
 markets <- subset(markets, VAL_1334 < 205)
 sp_markets <- as.ppp(coordinates(markets),as.owin(polyg))
 
+# Recalclulating KDE
+dens_weighted <- density(sp_markets, sigma=10000,
+weights=markets$VAL_1334, edge=TRUE, eps=500)
+plot(dens_weighted, col=topo.colors(50))
+points(markets, pch=19, cex=0.1)
+points(markets_major, pch=15, cex=0.7, col="red")
+
 ```
 
 ## Relative risk surface
