@@ -15,11 +15,9 @@ In importing the .csv data to R there was a problem with importing European styl
 ```{r}
 
 # I tested if the file is readable and if my path is correct:
-
 file.exists("~/R/SADE/week1/axes.csv")
 
 # Importing the data
-
 setwd("~/R/SADE/week1")
 axes <- read.csv(file="axes.csv", header=TRUE, sep=";", dec=",")
 class(axes)
@@ -31,28 +29,29 @@ sd(axes$weight)
 sd(axes$thickness, na.rm=T)
 
 # Plotting length vs weight
-
 par(mai=c(1,1,1,1))
 plot(x=axes$length, y=axes$weight, col="black", pch=16, main="Axe heads recovered by members of the public")
 
-# More plots and histograms
-
-boxplot(axes$length)
-
+# Boxplot: Axe length and width
 boxplot(axes$length, axes$width, ylab="millimeters")
 
+# Barplot: Axe weight, no sorting
 barplot(axes$weight, ylab="grams")
 
+# Barplot: Axe weight, sorted
 barplot(sort(axes$weight), ylab="grams")
 
+# Histogram: Axe weight, default
 hist(axes$weight)
 
+# Histogram: Axe weight, breaks defined
 hist(axes$weight, breaks=seq(0, 1200, 100))
 
+# Histogram: Combination 
+# Note: This works in R, but not in the knitted html page
 dev.new(device=pdf, height=6, width=12)
 par(mfrow=c(1,2), mai=c(1,1,1,1))
-barplot(sort(axes$weight), ylab="grams", names.arg =
-c(axes$km_number), las=3)
+barplot(sort(axes$weight), ylab="grams", names.arg = c(axes$km_number), las=3)
 hist(axes$weight)
 
 
@@ -60,30 +59,23 @@ hist(axes$weight)
 
 ## Plotting maps and spatial data
 
-Question: GIT?
-You can also embed plots, for example:
-
 ```{r}
-
+# Necessary libraries + Finland ESRI Shapefile
 library(rgdal)
 library(raster)
 
-setwd("~/R/SADE/week1")
 fin <- readOGR(dsn="finland", layer="finland_valtakunta_simpler")
 
+# Summary of Finland ESRI Shapefile
 summary(fin)
+
+# Plotting the data with monuments from .csv file
 plot(fin, col="lightgrey")
 monu <- read.csv(file="monuments_fha.csv", header=TRUE, sep=",")
 coordinates(monu) <- ~X+Y
 crs(monu) <- crs(proj4string(fin))
-
 points(monu, pch=19, cex=0.1)
-
 points(monu[monu$period == "stone age", ], pch=19, cex=0.1, col="red")
-
-
-# save.image("week1_sade.RData")
-# load("week1_sade.RData")
 
 ```
 
