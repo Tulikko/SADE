@@ -1,7 +1,7 @@
 ---
-title: "index"
+title: "Spatial Analysis and Data Exploration in History and Archaeology"
 author: "Uine Kailamäki"
-date: "4/29/2021"
+date: "04/2021"
 output: html_document
 ---
 
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## How to create course page:
 
-1) Create new repo
+1) Create new GitHub repo
 
 2) Open RStudio and create a new project by selecting:
 "File" - "New Project" - "Version Control" - "Git"
