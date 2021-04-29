@@ -27,10 +27,8 @@ a) Go back to your GitHub repository.
 
 b) Open "Settings" and scroll to "GitHub Pages". From "Source" select "master branch".
 
-c) Refresh the page and wait (might take a few minutes!) until you see the green text "Your site is published..."
-
-Now your course diary web page is online at
-your_github_username.github.io/repository_name
+c) Now your course diary web page is online at
+github_username.github.io/repository_name
 
 ```{r}
 # code
