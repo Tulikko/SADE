@@ -13,7 +13,25 @@ Text
 ## Point Densities
 
 ```{r}
+# Importing the data
+library(rgdal)
+library(raster)
+library(spatstat)
+library(maptools)
 
+setwd("~/R/SADE/week2")
+polyg <- readOGR(dsn="englandwales", layer="engwales_simple")
+
+# Info about readOGR function
+?readOGR
+
+# Digital Elevation Model (DEM) taken from NASA’s Shuttle Radar Topography Mission data
+dem <- raster("dem/engwales_dem.tif")
+plot(polyg)
+plot(dem, add=T)
+
+# Change the color scheme to more intuitive one
+plot(dem, add=T, col=terrain.colors(10))
 
 ```
 
