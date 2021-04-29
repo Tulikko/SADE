@@ -64,6 +64,25 @@ bw.diggle(sp_markets)
 plot(dens, col=heat.colors(10))
 points(markets, pch=19, cex=0.2)
 
+# Investigating data for attributes that might have overtly strong impact 
+head(markets, n=20)
+
+# We find out that mean value has very big spread (up to £11,000)
+summary(markets$VAL_1334)
+
+# The wealth of London is statistical outlier and hides the weaker patterns in comparison
+boxplot(markets$VAL_1334)
+
+# boxplot.stats gives us the lower whisker or minimum, the interquartile range of the middle (the second and fourth values), the median (third value) and the upper whisker or maximum. 
+boxplot.stats(markets$VAL_1334)
+
+# Subset to get rid of the high outliers to illustrate "weaker" patterns, original data is saved as markets_backup
+markets_backup <- markets
+
+markets_major <- subset(markets, VAL_1334 > 205)
+markets <- subset(markets, VAL_1334 < 205)
+sp_markets <- as.ppp(coordinates(markets),as.owin(polyg))
+
 ```
 
 ## Relative risk surface
