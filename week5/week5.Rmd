@@ -6,18 +6,25 @@ output: html_document
 ---
 
 
-# Week 5
+# 5: Cluster & Principal Component Analysis
 
 Text
 
-## Subtitle 1
+## Hierarchical cluster analysis
 
 ```{r}
 
 
 ```
 
-## Subtitle 2
+## K-Means Clustering
+
+```{r}
+
+
+```
+
+## Principal Component Analysis
 
 ```{r}
 

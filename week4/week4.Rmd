@@ -6,18 +6,25 @@ output: html_document
 ---
 
 
-# Week 4
+# 4:  Correspondence Analysis
 
 Text
 
-## Subtitle 1
+## Chi-squared Test
 
 ```{r}
 
 
 ```
 
-## Subtitle 2
+## Correspondence Analysis with Roman Coins
+
+```{r}
+
+
+```
+
+## Correspondence Analysis with Burial Data
 
 ```{r}
 

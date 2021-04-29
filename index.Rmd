@@ -1,5 +1,5 @@
 ---
-title: "SADE-2021"
+title: "Spatial Analysis and Data Exploration in History and Archaeology"
 author: "Uine Kailamäki"
 date: "04/2021"
 output:
@@ -17,7 +17,7 @@ output:
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
-This is my course page for the R exercises in the Spatial Analysis and Data Exploration in History and Archaeology course, University of Helsinki, lectured by Eljas Oksanen in Spring 2021.
+This is my course page for the R exercises in the Spatial Analysis and Data Exploration in History and Archaeology course, University of Helsinki, lectured by Eljas Oksanen in the Spring of 2021.
 
 **How to create a course page:**
 

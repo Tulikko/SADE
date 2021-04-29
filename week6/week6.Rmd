@@ -6,18 +6,25 @@ output: html_document
 ---
 
 
-# Week 6
+# 6: Aoristic Analysis
 
 Text
 
-## Subtitle 1
+## Simple Aoristic Analysis
 
 ```{r}
 
 
 ```
 
-## Subtitle 2
+## Monte Carlo Simulation
+
+```{r}
+
+
+```
+
+## Beta Distribution
 
 ```{r}
 

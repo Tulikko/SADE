@@ -6,18 +6,25 @@ output: html_document
 ---
 
 
-# Week 2
+# 2: Point Pattern Analysis
 
 Text
 
-## Subtitle 1
+## Point Densities
 
 ```{r}
 
 
 ```
 
-## Subtitle 2
+## Relative risk surface
+
+```{r}
+
+
+```
+
+## Nearest Neighbour
 
 ```{r}
 

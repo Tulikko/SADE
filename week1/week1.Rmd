@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-# Week 1
+# 1: Introduction to R and SADE
 
 In importing the .csv data to R there was a problem with importing European style .csv in which data is separated with ; instead of comma, and decimals are displayed with commas instead of dots. This was resolved by adding [sep=";", dec=","] when importing the data. I did also need to define the margin size for plots in order to display the results, but otherwise the exercise didn't pose much difficulty.
 
