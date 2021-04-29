@@ -31,8 +31,14 @@ plot(polyg)
 plot(dem, add=T)
 
 # Change the color scheme to more intuitive one
-plot(dem, add=T, col=terrain.colors(10))
+plot(dem, add=T, col=terrain.colors(5))
 
+# Loading medieval market sites from Samantha Letters’s (2002) Gazetteer of Markets and Fairs in England and Wales to 1516.
+markets <- readOGR(dsn="markets1334", layer="markets1334")
+points(markets, pch=19, cex=0.2)
+
+class(markets)
+head(markets, n=10)
 ```
 
 ## Relative risk surface
