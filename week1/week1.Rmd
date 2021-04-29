@@ -2,17 +2,15 @@
 title: "Week 1"
 author: "Uine Kailamäki"
 date: "2021"
-output: word_document
+output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 
-```
-
-## IMPORTING DATA IN R
+# Week 1
 
 In importing the .csv data to R there was a problem with importing European style .csv in which data is separated with ; instead of comma, and decimals are displayed with commas instead of dots. This was resolved by adding [sep=";", dec=","] when importing the data. I did also need to define the margin size for plots in order to display the results, but otherwise the exercise didn't pose much difficulty.
+
+## Importing and exploring data
 
 ```{r, echo=FALSE}
 
@@ -60,7 +58,7 @@ hist(axes$weight)
 
 ```
 
-## PLOTTING MAPS AND SPATIAL DATA
+## Plotting maps and spatial data
 
 Question: GIT?
 You can also embed plots, for example:
