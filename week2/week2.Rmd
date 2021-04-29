@@ -53,7 +53,7 @@ market_events <- markets
 markets <- remove.duplicates(markets)
 
 # Creating spastat object from markets
-# sp_markets <- as.ppp(coordinates(markets), as.owin(polyg))
+sp_markets <- as.ppp(coordinates(markets), as.owin(polyg))
 
 
 ```
