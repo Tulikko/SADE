@@ -14,8 +14,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(message = FALSE) 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
 This is my course page for the R exercises in the Spatial Analysis and Data Exploration in History and Archaeology course, University of Helsinki, lectured by Eljas Oksanen in Spring 2021.

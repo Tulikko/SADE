@@ -12,7 +12,7 @@ In importing the .csv data to R there was a problem with importing European styl
 
 ## Importing and exploring data
 
-```{r, echo=FALSE}
+```{r}
 
 # I tested if the file is readable and if my path is correct:
 
@@ -63,7 +63,7 @@ hist(axes$weight)
 Question: GIT?
 You can also embed plots, for example:
 
-```{r, echo=FALSE}
+```{r}
 
 library(rgdal)
 library(raster)
