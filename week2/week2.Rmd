@@ -14,6 +14,7 @@ Text
 
 ```{r}
 # Importing the data
+# Info about readOGR function: ?readOGR
 library(rgdal)
 library(raster)
 library(spatstat)
@@ -21,9 +22,6 @@ library(maptools)
 
 setwd("~/R/SADE/week2")
 polyg <- readOGR(dsn="englandwales", layer="engwales_simple")
-
-# Info about readOGR function
-?readOGR
 
 # Digital Elevation Model (DEM) taken from NASA’s Shuttle Radar Topography Mission data
 dem <- raster("dem/engwales_dem.tif")
@@ -55,6 +53,16 @@ markets <- remove.duplicates(markets)
 # Creating spastat object from markets
 sp_markets <- as.ppp(coordinates(markets), as.owin(polyg))
 
+# Kernel Density Estimate (KDE)
+dens <- density(sp_markets, sigma=10000, edge=TRUE, eps=500)
+plot(dens)
+
+# Computation to determine an “optimal” bandwidth (sigma)
+bw.diggle(sp_markets)
+
+# Adjusting color scheme and adding markets as points
+plot(dens, col=heat.colors(10))
+points(markets, pch=19, cex=0.2)
 
 ```
 
