@@ -1,5 +1,5 @@
 ---
-title: "Spatial Analysis and Data Exploration in History and Archaeology"
+title: "SADE-2021"
 author: "Uine Kailamäki"
 date: "04/2021"
 output: html_document
@@ -9,7 +9,11 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## How to create course page:
+# Spatial Analysis and Data Exploration in History and Archaeology Course, Spring 2021
+
+Course page for R exercises and notes
+
+## How to create a course page:
 
 1) Create new GitHub repo
 
