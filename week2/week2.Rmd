@@ -95,7 +95,35 @@ points(markets_major, pch=15, cex=0.7, col="red")
 ## Relative risk surface
 
 ```{r}
+# Setting up
+markets <- subset(markets_backup, DEFYR<1251)
+sp_markets <- as.ppp(coordinates(markets),as.owin(polyg))
 
+# Subsetting data
+earlier <- as.ppp(coordinates(markets[markets$by1200=="1",]),as.owin(polyg))
+later <- as.ppp(coordinates(markets[markets$by1200=="0",]),as.owin(polyg))
+multit <- sp_markets
+marks(multit) <- as.factor(markets$by1200)
+
+# Plotting the new multitype object
+plot(multit)
+
+# Density estimate of all the markets by 1250
+dens1250 <- density(sp_markets, sigma=25000, edge=TRUE,
+eps=500)
+plot(dens1250, col=topo.colors(50))
+points(markets, pch=19, cex=0.2)
+
+# Creating relative risk surface that contrasts earlier markets to those founded later
+
+rrs <- relrisk(multit, sigma=25000, edge=TRUE, eps=500)
+rrs[as.matrix(dens1250)<(0.000000001)] <- NA
+dev.new(device=pdf, height=6, width=6)
+plot(polyg)
+plot(rrs, col=rev(topo.colors(50)), add=T)
+plot(multit, cex=0.3, add=T)
+
+# Plotting side by side still doesn't work in the webpage version... Might need to find other solutions for that!
 
 ```
 
