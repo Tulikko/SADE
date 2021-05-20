@@ -13,7 +13,50 @@ Text
 ## Poisson Distribution & Complete Spatial Randomness
 
 ```{r}
+# Setting up
+setwd("~/R/SADE/week3")
+library(rgdal)
+library(raster)
+library(spatstat)
+library(maptools)
+library(GISTools)
 
+# Creating example data for Complete Spatial Randomness (CRS)
+# Every time "plot" command is run, the pattern changes to a newly generated random distribution
+window <- owin(c(0,10000), c(0,10000))
+plot(runifpoint(n=1000, win=window))
+
+# Setting seed allows everyone to see the same pattern 
+set.seed(1)
+plot(runifpoint(n=1000, win=window))
+
+# Loading the study area (a 10 x 10 grid)
+grid <- readOGR(dsn="grid", layer="grid")
+plot(grid)
+
+# Plotting the earlier random distribution to this grid illustrates that there is varying amounts of points in each cell (Poisson distribution)
+set.seed(1)
+randomp <- as.SpatialPoints.ppp(runifpoint(n=1000, win=grid))
+crs(randomp) <- crs(proj4string(grid))
+points(randomp, cex=0.5)
+
+# Calculating the number of points in each cell and mean value of points per cell, and plotting histogram to illustrate the distribution 
+hist(poly.counts(randomp,grid), xlim=c(0, 25))
+mean(poly.counts(randomp,grid))
+
+# Creating a curve for idealised distribution for mean = 10
+plot(dpois(x=0:20, lambda=10))
+lines(dpois(x=0:20, lambda=10), col="blue")
+
+# Plotting all side by side
+dev.new(device=pdf, width=9, height=3)
+par(mfrow=c(1,3))
+plot(grid, main="Random point pattern")
+points(randomp, cex=0.5)
+hist(poly.counts(randomp,grid), xlim=c(0, 20), main="Histogram
+of point distribution")
+plot(dpois(x=0:20, lambda=10), main="Expected Poisson")
+lines(dpois(x=0:20, lambda=10), col="blue")
 
 ```
 
