@@ -48,36 +48,117 @@ mean(poly.counts(randomp,grid))
 plot(dpois(x=0:20, lambda=10))
 lines(dpois(x=0:20, lambda=10), col="blue")
 
-# Plotting all side by side
-dev.new(device=pdf, width=9, height=3)
-par(mfrow=c(1,3))
-plot(grid, main="Random point pattern")
-points(randomp, cex=0.5)
-hist(poly.counts(randomp,grid), xlim=c(0, 20), main="Histogram
-of point distribution")
-plot(dpois(x=0:20, lambda=10), main="Expected Poisson")
-lines(dpois(x=0:20, lambda=10), col="blue")
-
 ```
 
 ## Nearest Neighbour Revisited
 
 ```{r}
 
+# Loading the exercise data: a map depicting "nucleated" settlements (e.g. villages and towns)
+polyg <- readOGR(dsn="england", layer="england_historic")
+dem <- raster("dem_england/dem_england_historic.tif")
+settl <- readOGR(dsn="nucleations", layer="Nucleations")
+plot(polyg)
+plot(dem, add=T, col=terrain.colors(10))
+points(settl, pch=19, cex=0.1)
+
+# Omitting points that fall outside of the polygon and converting the data into spastat object
+settl <- settl[polyg, ]
+sp_settl <- as.ppp(coordinates(settl),as.owin(polyg))
+
+# Histogram of distribution of distances and mean value
+hist(nndist(sp_settl), xlim=c(0,6000), breaks=100)
+mean(nndist(sp_settl))
+
+# Clark and Evans test
+# R > 1 (and p << 0.05) means that the sites are dispersed
+clarkevans.test(sp_settl, corrections="all")
 
 ```
 
 ## K-function, L-function and Pair Correlation Function (PCF)
 
 ```{r}
+# RECALLING PREVIOUS POLYGON TO THIS R CHUNK, OTHERWISE ADDING THE NEW SUBAREAS DIDN'T WORK
+polyg <- readOGR(dsn="england", layer="england_historic")
+dem <- raster("dem_england/dem_england_historic.tif")
+settl <- readOGR(dsn="nucleations", layer="Nucleations")
+plot(polyg)
+plot(dem, add=T, col=terrain.colors(10))
+points(settl, pch=19, cex=0.1)
+settl <- settl[polyg, ]
+sp_settl <- as.ppp(coordinates(settl),as.owin(polyg))
 
+# Loading two polygons describing the new study areas
+south <- readOGR(dsn="southernengland", layer="eng_south")
+mid <- readOGR(dsn="midlands", layer="midlands")
+
+plot(south, border="red", add=T)
+plot(mid, border="cyan", add=T)
+
+# Creating objects that contain settlements that fall into these regions & creating spastat objects
+south_settl <- settl[south, ]
+sp_south_settl <- as.ppp(coordinates(south_settl),as.owin(south))
+points(sp_south_settl, pch=19, cex=0.1, col="red")
+
+mid_settl <- settl[mid, ]
+sp_mid_settl <- as.ppp(coordinates(mid_settl),as.owin(mid))
+points(sp_mid_settl, pch=19, cex=0.1, col="cyan")
+
+# Plotting the point distributions
+plot(south, main="Avon region")
+plot(dem, add=T, col=terrain.colors(20))
+points(sp_south_settl, pch=19, cex=0.5)
+
+plot(mid, main="Midlands")
+plot(dem, add=T, col=terrain.colors(20))
+points(sp_mid_settl, pch=19, cex=0.5)
+
+# Running Clark & Evants test 
+# Visually we can see that there is clustering of settlements near the waterways in "South", so the "dispersed" (R > 1) result for both of them seems not to capture the full picture 
+clarkevans.test(sp_south_settl, correction="none")
+clarkevans.test(sp_mid_settl, correction="none")
+
+# K function 
+# "Pois" is the expected Poisson line, the others are how the data compares to it with a few different edge corrections
+k_func_south <- Kest(sp_south_settl)
+dev.new(device=pdf)
+plot(k_func_south, xlim=c(0,5000), main="K-Function South
+close-up")
+
+# L function (Same as K but Pois is straightened)
+l_func_south <- Lest(sp_south_settl)
+plot(l_func_south, xlim=c(0,5000))
+
+# PCF (pair correlation function)
+# Same principle as K, but different process ("donut rings")
+# Expected Poisson is the green horizontal line
+pc_func_south <- pcf(sp_south_settl)
+plot(pc_func_south, xlim=c(0,5000))
 
 ```
 
 ## Monte Carlo Simulation
 
 ```{r}
+# Monte Carlo Simulation
+# The grey envelope depicts results of random point patterns simulations in the study area, the line shows where our data deviates from this area of random distribution 
+pc_func_100_south <- envelope(sp_south_settl, pcf, nsim=99)
+plot(pc_func_100_south, xlim=c(0,20000), main="South: PCF with
+99 MC Simulations")
 
+# Refined simulation with 999 simulations, and top and bottom 25 % removed in case of statistical outliers
+# REDUCED nsim to 99 for the GitHub site as it takes too long to calculate again and again when knitting the html page
+pc_func_1000_south <- envelope(sp_south_settl, pcf, nsim=99,
+nrank=25)
+plot(pc_func_1000_south, xlim=c(0,20000), main="South: PCF
+with 999 MC Simulations")
+
+# Comparing to Midlands data: R value barely gets to random pattern envelope, settlement patterns seem to be not clustered
+pc_func_1000_mid <- envelope(sp_mid_settl, pcf, nsim=99,
+nrank=25)
+plot(pc_func_1000_mid, xlim=c(0,5000), main="Midlands: PCF
+with 999 MC Simulations")
 
 ```
 
@@ -85,5 +166,58 @@ lines(dpois(x=0:20, lambda=10), col="blue")
 
 ```{r}
 
+# Loading data: location of Oxford and Oxford pottery found
+sites <- readOGR(dsn="pottery_sites", layer="pottery_sites")
+oxford <- readOGR(dsn="oxford/oxford.shp", layer="oxford")
+plot(polyg)
+points(oxford, pch=15, cex=2)
+points(sites)
+
+# Inspecting site names
+head(sites, n=30)
+
+# Dependant variable = the proportion of Oxford pottery at each sites (oxpots)
+# Independent variable = distance of the site from Oxford
+
+# Calculating these distances:
+# Step 1: combine coordinate data to single list 
+coords <- rbind(coordinates(sites), coordinates(oxford))
+
+# Step 2: distance matrix between sites
+d_matrix <- as.matrix(dist(coords))
+
+# Step 3: Adding "distox" as a column to "sites" data frame 
+sites$distox <- d_matrix[31,1:30]
+
+# Scatter plot
+plot(sites$distox,sites$oxpots)
+
+# Linear regression analysis (lm) and adding the result to the scatterplot
+res <- lm(sites$oxpots ~ sites$distox)
+abline(res, col="red")
+
+# Summary of the linear regression analysis results
+summary(res)
+
+# Residuals: adding new column to "sites"
+sites$sr <- residuals(res) / summary(res)$sigma
+
+# Taking a look at results with boxplot & scatterplot
+boxplot(sites$sr)
+plot(sites$distox,sites$sr)
+
+# Mapping the residual values
+plot(polyg)
+points(oxford, pch=15, cex=2)
+points(sites[sites$sr >=-3 & sites$sr <=-2,], pch=1,
+cex=3, col="blue")
+points(sites[sites$sr >=-2 & sites$sr <=-1,], pch=1,
+cex=2, col="blue")
+points(sites[sites$sr >=-1 & sites$sr <=0,], pch=1,
+cex=1, col="blue")
+points(sites[sites$sr >=0 & sites$sr <=1,], pch=1,
+cex=1, col="red")
+points(sites[sites$sr >=1 & sites$sr <=2,], pch=1,
+cex=2, col="red")
 
 ```
