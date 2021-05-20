@@ -131,5 +131,27 @@ plot(multit, cex=0.3, add=T)
 
 ```{r}
 
+# Distances between market sites and their closest neighbours
+nndist(sp_markets)
+
+# Visualizing the data and taking the mean
+hist(nndist(sp_markets), breaks=seq(0, 50000, 1000))
+mean(nndist(sp_markets))
+
+# Clark and Evans test: 
+# R value of 1.08 tells the sites are slightly dispersed, and p << 0.05 tells us that the result is statistically significant
+clarkevans.test(sp_markets, corrections="none")
+
+# Calling back the "markets as events" data from earlier, creating a subset of those that were recorded before 1250
+# R value of 0.96 tells us that the data is slightly clustered
+market_events1250 <- subset(market_events, DEFYR<1251)
+sp_market_events <-
+as.ppp(coordinates(market_events1250),as.owin(polyg))
+hist(nndist(sp_market_events), breaks=seq(0, 50000, 1000))
+mean(nndist(sp_market_events))
+clarkevans.test(sp_market_events, corrections="none")
+
+# This final code is not needed in RStudio or the GitHub webpage
+# save.image("week2_sade.RData")
 
 ```
