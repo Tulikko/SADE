@@ -13,6 +13,16 @@ Text
 ## Chi-squared Test
 
 ```{r}
+# Setting working directory
+setwd("~/R/SADE/week4")
+
+# Setting up a toy dataset
+soils <- c("clay", "morainic", "peat")
+monuments <- c(21, 7, 24)
+pct_land <- c(0.45, 0.25, 0.3)
+mydata <- cbind.data.frame(soils, monuments, pct_land)
+
+mydata
 
 
 ```
