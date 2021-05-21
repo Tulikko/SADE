@@ -8,12 +8,67 @@ output: html_document
 
 # 5: Cluster & Principal Component Analysis
 
-Text
-
 ## Hierarchical cluster analysis
 
 ```{r}
+# Setting up and renaming "ï..height" back to "height"
+setwd("~/R/SADE/week5")
+library(cluster)
 
+peacock<-read.csv(file="peacock.csv", header=TRUE, sep=",")
+colnames(peacock)[colnames(peacock) == 'ï..height'] <- 'height'
+
+# Exploring the data 
+# The "las=2" in boxplot flips the x axis labels so they don't overlap
+summary(peacock)
+boxplot(peacock[-c(12:13)], las=2)
+
+# Scaling the data
+peacock.std<-scale(peacock[1:11])
+peacock.std
+boxplot(peacock.std, las=2)
+
+# Summary statistics with agnes() command
+agnes(peacock.std)
+
+# Cluster analysis (HCA): Single linkage
+peacock.single <- hclust(dist(peacock.std, method="euclid"), method="single")
+plot(peacock.single, main="Single Linkage")
+
+# Outlining 5 clusters in the dendrogram
+rect.hclust(peacock.single, k=5)
+
+# Adding the assigned group as a column to the original data frame
+peacock.single.5<-cutree(peacock.single,k=5)
+peacock$single.5 <- peacock.single.5
+peacock
+
+# Cross-tabulating the new groups vector (groups 1-5) with the original "type" column (types A-E)
+# In our experimental groups, a few outliers dominate the "typing" (group 2 has 35 mills!)
+addmargins(table(peacock.single.5,peacock[,13]))
+
+# Average method (HCA) 
+peacock.ave<-
+hclust(dist(peacock.std,method="euclid"),method="ave")
+
+# Wards method (HCA) 
+peacock.ward<-
+hclust(dist(peacock.std,method="euclid"),method="ward")
+
+# Plotting all three methods for comparison
+plot(peacock.single,main="Single Linkage")
+rect.hclust(peacock.single,k=5)
+plot(peacock.ave,main="Average Linkage")
+rect.hclust(peacock.ave,k=5)
+plot(peacock.ward,main="Ward")
+rect.hclust(peacock.ward,k=5)
+
+# Examinimg the new groups with cross tabulation
+peacock.ave.5<-cutree(peacock.ave,k=5)
+peacock.ward.5<-cutree(peacock.ward,k=5)
+addmargins(table(peacock.single.5,peacock[,13]))
+addmargins(table(peacock.ave.5,peacock[,13]))
+addmargins(table(peacock.ward.5,peacock[,13]))
 
 ```
 
@@ -21,6 +76,35 @@ Text
 
 ```{r}
 
+# This analysis for determining optimal amount of clusters is sensitive to the set seed
+# But rerunning the analysis with a few different seeds shows that more often than not, 5 seems to be a good fit for this data
+library(tidyverse)
+set.seed(12)
+wss <- function(k) {
+kmeans(peacock.std, k)$tot.withinss
+}
+k.values <- 1:10
+wss_values <- map_dbl(k.values, wss)
+plot(k.values, wss_values,
+type="b", pch = 19, frame = FALSE,
+xlab="Number of clusters K",
+ylab="Total within-clusters sum of squares")
+
+# K-means partitioning
+peacock.k5<-kmeans(peacock.std,centers=5)
+peacock.k5
+addmargins(table(peacock.k5$cluster, peacock[,14]))
+
+# Defining my own color vector for the plot, then plotting the pairs
+mycols<-c("black","red","blue","green","cyan")
+plot(peacock[1:11],col=mycols[peacock.k5$cluster],pch=19, cex=0.5)
+
+# Trying again with 3 klusters
+peacock.k3<-kmeans(peacock.std,centers=3)
+plot(peacock[1:11],col=mycols[peacock.k3$cluster],pch=19, cex=0.3)
+
+# Plotting the height and diameter pair in better resolution
+plot(peacock[,1]~peacock[,2],pch=16,col=mycols[peacock.k3$cluster])
 
 ```
 
@@ -28,5 +112,42 @@ Text
 
 ```{r}
 
+# Carrying out PCA
+peacockPCA<-prcomp(peacock[,1:11],center=T,scale=T)
+
+plot(peacockPCA)
+peacockPCA$sdev^2
+summary(peacockPCA)
+
+# Plotting the PCA
+biplot(peacockPCA,main="PCA biplot of Roman mills")
+
+# Plotting with Peacock’s groups instead of numbers
+biplot(peacockPCA,xlabs=peacock[,13], main="PCA biplot of mill
+data with Peacock groups")
+
+# Plotting with K-means groups instead of numbers
+biplot(peacockPCA,xlabs=peacock.k5$cluster)
+
+# Using FactoMineR for PCA
+library("FactoMineR")
+peacockPCA_FTMR<-PCA(peacock[1:11])
+
+# Diagnostics with FactoMineR
+round(peacockPCA_FTMR$eig,2)
+dimdesc(peacockPCA_FTMR)
+round(peacockPCA_FTMR$var$cor,2)
+round(peacockPCA_FTMR$var$cos,2)
+
+# Colour plotting 
+# Had to tweak mycols to "as.factor" instead of "as.numeric" in cols2, as.numeric returned only NA:s
+# Plotting with these color schemes doesn't work in this version of R
+cols2 <- mycols[as.factor(peacock$type)]
+cols2
+## plot(peacockPCA_FTMR, choix ='ind', col.ind=cols2, title="PCA and Peacock's Mills")
+
+cols3<-mycols[as.numeric(peacock.k5$cluster)]
+cols3
+## plot(peacockPCA_FTMR, choix ='ind', col.ind=cols3, title="PCA and Peacock's Mills")
 
 ```

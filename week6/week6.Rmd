@@ -8,12 +8,11 @@ output: html_document
 
 # 6: Aoristic Analysis
 
-Text
-
 ## Simple Aoristic Analysis
 
 ```{r}
 
+setwd("~/R/SADE/week6")
 
 ```
 

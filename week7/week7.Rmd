@@ -8,12 +8,11 @@ output: html_document
 
 # Final assignment
 
-Text
-
 ## Subtitle 1
 
 ```{r}
 
+setwd("~/R/SADE/week7")
 
 ```
 

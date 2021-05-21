@@ -8,8 +8,6 @@ output: html_document
 
 # 3: Point Pattern Analysis & Regression Analysis
 
-Text
-
 ## Poisson Distribution & Complete Spatial Randomness
 
 ```{r}
