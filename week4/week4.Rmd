@@ -24,19 +24,89 @@ mydata <- cbind.data.frame(soils, monuments, pct_land)
 
 mydata
 
+# One-sample Chi-squared test
+# Null hypothesis is that there is no significant relationship between the distribution of the monuments and the soil type areas they are found in
+# Step 1: create column with the expected nr of monuments per soil area
+mydata$expected <- mydata$pct_land * sum(mydata$monuments)
+mydata
+# Step 2: Chi-squared test
+chisq.test(mydata$monuments, p=mydata$pct_land)
+# X-squared = 7.5385, df = 2, p-value = 0.02307
+# -> We can reject the null hypothesis (of the distribution being random) with 97.7 % confidence
+
+# Two-sample Chi-squared test
+soils <- c("clay", "morainic", "peat")
+houses <- c(6, 3, 19)
+manu <- c(10, 3, 2)
+ritual <- c(5, 1, 3)
+pct_land <- c(0.45, 0.25, 0.3)
+newdata <- cbind.data.frame(soils, houses, manu, ritual,
+pct_land)
+
+newdata
+
+newdata2 <- data.frame(newdata$houses, newdata$manu,
+newdata$ritual)
+
+chisq.test(newdata2)
+# X-squared = 12.919, df = 4, p-value = 0.01168
+# p < 0.05, so we can reject null hypothesis
 
 ```
 
 ## Correspondence Analysis with Roman Coins
 
 ```{r}
+# Setting up
+# Note: had to replace row.names="hordes" to row.names=1 for the code to work
+library(ca)
+mydata <- read.csv(file="romanhoards.csv", header=TRUE, sep=",", row.names=1)
+summary(mydata)
 
+# Using t() to flip rows to columns
+t.mydata <- t(mydata)
+t.mydata
+
+# Removing the "total" row from the analysis data
+t.mydata <- t.mydata[-c(19),]
+summary(t.mydata)
+
+# CA from the data, excluding the "uncertain" and "Total" columns
+mydata.ca <- ca(mydata[,1:17])
+summary(mydata.ca)
+# The first two dimensions explain cumulatively 97.6 % of the variation
+# So we can quite comfortably plot the data into 2-dimensional graph!
+plot(mydata.ca)
+
+# Plotting just the rows or just the columns with "what" argument
+plot(mydata.ca, what=c("none","all"), main="Columns")
+plot(mydata.ca, what=c("all","none"), main="Rows")
+
+# Selecting which CA dimensions to plot to see it from different angles
+plot(mydata.ca, dim=c(1,3))
 
 ```
 
 ## Correspondence Analysis with Burial Data
 
 ```{r}
+# Reading data (had to tweak the row.names argument again - apparently it got translated to "ï..pottery" instead of "pottery")
+baxter <- read.csv(file="baxter_burials.csv", header=TRUE, sep=",", row.names="ï..pottery")
 
+# Exploring the data
+structure(baxter)
+boxplot(baxter)
+
+# CA for the data
+# In the plots (drawn from the first three dimensions) burials are shown as red triangles and pottery types as blue dots
+baxter.ca <- ca(baxter)
+summary(baxter.ca)
+plot(baxter.ca)
+plot(baxter.ca, dim=c(1,3))
+plot(baxter.ca, dim=c(2,3))
+
+# Removing row c as an outlier
+baxter.ca <- ca(baxter[,-c(3)])
+plot(baxter.ca)
 
 ```
