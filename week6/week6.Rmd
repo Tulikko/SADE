@@ -12,7 +12,58 @@ output: html_document
 
 ```{r}
 
+# Setting up
 setwd("~/R/SADE/week6")
+library(devtools)
+
+# Downloading the archSeries package
+devtools::install_github("davidcorton/archSeries")
+library(archSeries)
+
+# Data
+mydata <- read.csv(file="mydata.csv", header=TRUE, sep=",")
+
+head(mydata)
+nrow(mydata)
+
+# Renaming columns to comply with archSeries
+names(mydata)[names(mydata)=="fromdate"] <- "Start"
+names(mydata)[names(mydata)=="todate"] <- "End"
+
+# Coercing NA:s to zeros, then removing all the rows in which Start or End date is zero
+mydata[is.na(mydata)] <- 0
+mydata<-subset(mydata, Start!="0")
+mydata<-subset(mydata, End!="0")
+
+# Inspecting for typos in Start and End dates
+mydata$subtract <- (mydata$End - mydata$Start)
+mydata <- mydata[order(mydata$subtract),]
+head(mydata)
+
+# Deleting the typoed rows with earlier End date than Start date 
+mydata <- mydata[!mydata$subtract < 0, ]
+
+# Simplifying the data by selecting only the vectors we need for the analysis
+mydata <- mydata[,c("objecttype", "Start","End")]
+
+# Aoristic weighing + plot
+aorist<-aorist(mydata, start.date=1000, end.date=1600, bin.width=20)
+aorist.plot(aorist, opacity=80, ylab="Aoristic Sum")
+
+summary(mydata)
+structure(mydata)
+
+# Dividing data into "coin" and artifacts
+coin <- mydata[mydata$objecttype == "COIN", ]
+notcoin <- mydata[mydata$objecttype != "COIN", ]
+
+# Aoristic weighing + plot for coins
+aorist_coin<-aorist(coin, start.date=1000, end.date=1600, bin.width=20)
+aorist.plot(aorist_coin, opacity=80, ylab="Aoristic Sum for Coin")
+
+# Aoristic weighing + plot for artifacts
+aorist_notcoin<-aorist(notcoin, start.date=1000, end.date=1600, bin.width=20)
+aorist.plot(aorist_notcoin, opacity=80, ylab="Aoristic Sum for Coin")
 
 ```
 
@@ -20,6 +71,40 @@ setwd("~/R/SADE/week6")
 
 ```{r}
 
+# Creating unique ID row for the analysis
+mydata$ID <- c(1:nrow(mydata))
+
+# Simulating distributions
+mydata_sim<-date.simulate(mydata, start.date=1000, end.date=1600, bin.width=20, reps=1000)
+
+# Plotting the results
+lines.chron(mydata_sim)
+
+poly.chron(mydata_sim)
+
+box.chron(mydata_sim)
+
+# Same for coin and artifacts
+coin$ID <- c(1:nrow(coin))
+notcoin$ID <- c(1:nrow(notcoin))
+
+# coin
+coin_sim<-date.simulate(coin, start.date=1000, end.date=1600, bin.width=20, reps=1000)
+
+lines.chron(coin_sim)
+
+poly.chron(coin_sim)
+
+box.chron(coin_sim)
+
+# notcoin
+notcoin_sim<-date.simulate(notcoin, start.date=1000, end.date=1600, bin.width=20, reps=1000)
+
+lines.chron(notcoin_sim)
+
+poly.chron(notcoin_sim)
+
+box.chron(notcoin_sim)
 
 ```
 
@@ -27,5 +112,21 @@ setwd("~/R/SADE/week6")
 
 ```{r}
 
+# Creating data
+data = seq(0,1, length=100)
+
+# Applying a probability distribution function to it with different parameters of α and β:
+# α = 1 and β = 1 (each bin is given equal importance)
+plot(data, dbeta(data, 1, 1), ylab="density", type ="l", col="black")
+
+# α = 2 and β = 2 (prioritizes the middle at the expense of edge bins)
+plot(data, dbeta(data, 2, 2), ylab="density", type ="l", col="red")
+
+# Applying to our earlier data with α = 2 and β = 2
+mydata_sim_2<-date.simulate(mydata, start.date=1000, end.date=1600, bin.width=20, reps=1000, a=2, b=2)
+
+lines.chron(mydata_sim_2)
+poly.chron(mydata_sim_2)
+box.chron(mydata_sim_2)
 
 ```
