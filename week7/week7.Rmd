@@ -10,8 +10,8 @@ output: html_document
 
 ## Task 1
 
-Using Dataset 1, 
-a) plot medieval settlements in the county of Kent, and 
+Using Dataset 1, \
+a) plot medieval settlements in the county of Kent, and \
 b) run K, L and Pair Correlation Function analysis with 99 runs of Monte Carlo simulation on the data. 
 
 ```{r}
@@ -71,10 +71,10 @@ plot(pc_fun_100, xlim=c(0,20000), main="South: PCF with 99 MC Simulations")
 
 ## Task 2
 
-Using Dataset 2, 
+Using Dataset 2, \
 a) plot the distribution of medieval object findspots in the county of
-Kent. 
-b) Perform kernel density analysis on the findspots, using a few different search radii. 
+Kent. \
+b) Perform kernel density analysis on the findspots, using a few different search radii. \
 c) Also perform a relative risk surface analysis, using the object type “seal matrix”.
 
 ```{r}
@@ -84,8 +84,8 @@ c) Also perform a relative risk surface analysis, using the object type “seal 
 
 ## Task 3
 
-a) Perform aoristic analysis on Dataset 3, both on the whole dataset and on just the seal matrices. 
-b) Include the graphs for aoristic weighing (bar charts) and 
+a) Perform aoristic analysis on Dataset 3, both on the whole dataset and on just the seal matrices. \
+b) Include the graphs for aoristic weighing (bar charts) and \
 c) for aoristic analysis with MC simulation (your choice of line, polygon “blocks colour” or boxplot charts), both for the overall and the seal matrices analyses.
 
 ```{r}
