@@ -51,7 +51,6 @@ aorist<-aorist(mydata, start.date=1000, end.date=1600, bin.width=20)
 aorist.plot(aorist, opacity=80, ylab="Aoristic Sum")
 
 summary(mydata)
-structure(mydata)
 
 # Dividing data into "coin" and artifacts
 coin <- mydata[mydata$objecttype == "COIN", ]

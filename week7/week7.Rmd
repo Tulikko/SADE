@@ -8,15 +8,103 @@ output: html_document
 
 # Final assignment
 
-## Subtitle 1
+## Task 1
+
+Using Dataset 1, 
+a) plot medieval settlements in the county of Kent, and 
+b) run K, L and Pair Correlation Function analysis with 99 runs of Monte Carlo simulation on the data. 
 
 ```{r}
 
+# Setting up WD and necessary libraries
 setwd("~/R/SADE/week7")
+library(rgdal)   
+library(raster)   
+library(spatstat) 
+library(maptools)
+library(GISTools)  
+
+
+# Loading and plotting the polygon "kent"
+polyg <- readOGR(dsn="kent")
+plot(polyg)
+
+# Adding Digital Elevation Model to the plot to visualize topography
+dem <- raster("dem_england/dem_england_historic.tif")
+plot(dem, add=T, col=terrain.colors(15))
+
+# Adding the medieval settlements as points to the plot
+sett <- readOGR(dsn="dataset1")
+points(sett, pch=19, cex=0.2)
+
+# Omitting points that might fall outside of the polygon 
+sett <- sett[polyg, ]
+
+# Inspecting how "dataset1" looks like
+head(sett)
+summary(sett)
+
+# Converting the data into spastat object for analysis
+sp_sett <- as.ppp(coordinates(sett),as.owin(polyg))
+
+# K-Function analysis
+# "Pois" is the expected Poisson line, the others are how the data compares to it with a few different edge corrections
+k_fun <- Kest(sp_sett)
+plot(k_fun, xlim=c(0,5000), main="K-Function analysis")
+
+# L-Function analysis
+# Same as K but "Pois" is straightened to a straight line
+l_fun <- Lest(sp_sett)
+plot(l_fun, xlim=c(0,5000), main="L-Function analysis")
+
+# Pair Correlation Function analysis (PCF)
+# Same principle as K, but different process ("donut rings")
+# Expected Poisson is the green horizontal line
+pc_fun <- pcf(sp_sett)
+plot(pc_fun, xlim=c(0,5000), main="Pair Correlation Function analysis")
+
+# Monte Carlo Simulation
+pc_fun_100 <- envelope(sp_sett, pcf, nsim=99)
+plot(pc_fun_100, xlim=c(0,20000), main="South: PCF with 99 MC Simulations")
 
 ```
 
-## Subtitle 2
+## Task 2
+
+Using Dataset 2, 
+a) plot the distribution of medieval object findspots in the county of
+Kent. 
+b) Perform kernel density analysis on the findspots, using a few different search radii. 
+c) Also perform a relative risk surface analysis, using the object type “seal matrix”.
+
+```{r}
+
+
+```
+
+## Task 3
+
+a) Perform aoristic analysis on Dataset 3, both on the whole dataset and on just the seal matrices. 
+b) Include the graphs for aoristic weighing (bar charts) and 
+c) for aoristic analysis with MC simulation (your choice of line, polygon “blocks colour” or boxplot charts), both for the overall and the seal matrices analyses.
+
+```{r}
+
+
+```
+
+## Task 4
+
+Perform PCA on dataset 4.
+
+```{r}
+
+
+```
+
+## Task 5
+
+Perform cluster analysis on dataset 4.
 
 ```{r}
 

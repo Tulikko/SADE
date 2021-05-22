@@ -77,6 +77,7 @@ clarkevans.test(sp_settl, corrections="all")
 ## K-function, L-function and Pair Correlation Function (PCF)
 
 ```{r}
+
 # RECALLING PREVIOUS POLYGON TO THIS R CHUNK, OTHERWISE ADDING THE NEW SUBAREAS DIDN'T WORK
 polyg <- readOGR(dsn="england", layer="england_historic")
 dem <- raster("dem_england/dem_england_historic.tif")
@@ -121,8 +122,7 @@ clarkevans.test(sp_mid_settl, correction="none")
 # "Pois" is the expected Poisson line, the others are how the data compares to it with a few different edge corrections
 k_func_south <- Kest(sp_south_settl)
 dev.new(device=pdf)
-plot(k_func_south, xlim=c(0,5000), main="K-Function South
-close-up")
+plot(k_func_south, xlim=c(0,5000), main="K-Function South close-up")
 
 # L function (Same as K but Pois is straightened)
 l_func_south <- Lest(sp_south_settl)
@@ -142,21 +142,18 @@ plot(pc_func_south, xlim=c(0,5000))
 # Monte Carlo Simulation
 # The grey envelope depicts results of random point patterns simulations in the study area, the line shows where our data deviates from this area of random distribution 
 pc_func_100_south <- envelope(sp_south_settl, pcf, nsim=99)
-plot(pc_func_100_south, xlim=c(0,20000), main="South: PCF with
-99 MC Simulations")
+plot(pc_func_100_south, xlim=c(0,20000), main="South: PCF with 99 MC Simulations")
 
 # Refined simulation with 999 simulations, and top and bottom 25 % removed in case of statistical outliers
 # REDUCED nsim to 99 for the GitHub site as it takes too long to calculate again and again when knitting the html page
 pc_func_1000_south <- envelope(sp_south_settl, pcf, nsim=99,
 nrank=25)
-plot(pc_func_1000_south, xlim=c(0,20000), main="South: PCF
-with 999 MC Simulations")
+plot(pc_func_1000_south, xlim=c(0,20000), main="South: PCF with 999 MC Simulations")
 
 # Comparing to Midlands data: R value barely gets to random pattern envelope, settlement patterns seem to be not clustered
 pc_func_1000_mid <- envelope(sp_mid_settl, pcf, nsim=99,
 nrank=25)
-plot(pc_func_1000_mid, xlim=c(0,5000), main="Midlands: PCF
-with 999 MC Simulations")
+plot(pc_func_1000_mid, xlim=c(0,5000), main="Midlands: PCF with 999 MC Simulations")
 
 ```
 
