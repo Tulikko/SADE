@@ -64,7 +64,7 @@ plot(pc_fun, xlim=c(0,5000), main="Pair Correlation Function analysis")
 
 # Monte Carlo Simulation
 pc_fun_100 <- envelope(sp_sett, pcf, nsim=99)
-plot(pc_fun_100, xlim=c(0,20000), main="South: PCF with 99 MC Simulations")
+plot(pc_fun_100, xlim=c(0,20000), main="PCF with 99 MC Simulations")
 
 ```
 
@@ -84,7 +84,6 @@ library(rgdal)
 library(raster)   
 library(spatstat) 
 library(maptools)
-library(GISTools)  
 
 # Loading and plotting the polygon "kent"
 polyg2 <- readOGR(dsn="kent")
@@ -99,21 +98,21 @@ sett2 <- readOGR(dsn="dataset2")
 points(sett2, pch=19, cex=0.2)
 
 # Omitting points that might fall outside of the polygon 
-sett2 <- sett2[polyg, ]
+sett2 <- sett2[polyg2, ]
 
-# Inspecting how "dataset1" looks like
+# Inspecting how "dataset2" looks like
 head(sett2)
 summary(sett2)
 
 # Converting the data into spastat object for analysis
-sp_sett2 <- as.ppp(coordinates(sett),as.owin(polyg))
+sp_sett2 <- as.ppp(coordinates(sett2),as.owin(polyg2))
 
 # Computation to determine an “optimal” bandwidth (sigma)
 bw.diggle(sp_sett2)
 
 # Kernel Density Estimate (KDE) 1
 dens <- density(sp_sett2, sigma=14, edge=TRUE, eps=500)
-plot(dens, col=heat.colors(5))
+plot(dens, col=heat.colors(10))
 points(sett2, pch=19, cex=0.2)
 
 # Kernel Density Estimate (KDE) 2
@@ -136,6 +135,49 @@ dens5 <- density(sp_sett2, sigma=100000, edge=TRUE, eps=500)
 plot(dens5, col=heat.colors(10))
 points(sett2, pch=19, cex=0.2)
 
+# Seeing if one find type dominates the data
+library(dplyr)
+df <- data.frame(table(sett2$objecttype))
+df %>%
+  arrange(desc(Freq))
+
+# Dividing data into "coin" and artifacts
+coin <- sett2[sett2$objecttype == "COIN", ]
+notcoin <- sett2[sett2$objecttype != "COIN", ]
+
+# Converting the divided data into spastat objects for analysis
+sp_coin <- as.ppp(coordinates(coin),as.owin(polyg2))
+dens6 <- density(sp_coin, sigma=5000, edge=TRUE, eps=500)
+plot(dens6, col=heat.colors(10))
+points(coin, pch=19, cex=0.2)
+
+sp_notcoin <- as.ppp(coordinates(notcoin),as.owin(polyg2))
+dens7 <- density(sp_notcoin, sigma=5000, edge=TRUE, eps=500)
+plot(dens7, col=heat.colors(10))
+points(notcoin, pch=19, cex=0.2)
+
+
+# Step 1: Creating and plotting multitype object "sp_seals" 
+sp_seals <- as.ppp(coordinates(sett2),as.owin(polyg2))
+
+yes <- as.ppp(coordinates(sett2[sett2$objecttype == "SEAL MATRIX",]),as.owin(polyg))
+no <- as.ppp(coordinates(sett2[sett2$objecttype != "SEAL MATRIX",]),as.owin(polyg))
+marks(sp_seals) <- as.factor(sett2$seals)
+
+plot(polyg2, add=F)
+plot(sp_seals, add=T)
+
+# Step 2: Density estimate of all object finds
+densobj <- density(sp_seals, sigma=5000, edge=TRUE, eps=500)
+plot(densobj, col=topo.colors(50))
+points(sp_seals, pch=19, cex=0.2)
+
+# Step 3: Relative risk surface contrasting "SEAL MATRIX" with all object finds
+rrs <- relrisk(sp_seals, sigma=5000, edge=TRUE, eps=500)
+rrs[as.matrix(densobj)<(0.000000001)] <- NA
+
+plot(rrs, col=rev(topo.colors(50)), add=F)
+plot(yes, cex=0.5, add=T)
 
 ```
 
