@@ -181,7 +181,6 @@ b) Include the graphs for aoristic weighing (bar charts) and \
 c) for aoristic analysis with MC simulation (your choice of line, polygon “blocks colour” or boxplot charts), both for the overall and the seal matrices analyses.
 
 ```{r}
-library(devtools)
 library(archSeries)
 
 # Data
