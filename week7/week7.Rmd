@@ -78,13 +78,6 @@ c) Also perform a relative risk surface analysis, using the object type “seal 
 
 ```{r}
 
-# Setting up WD and necessary libraries
-setwd("~/R/SADE/week7")
-library(rgdal)   
-library(raster)   
-library(spatstat) 
-library(maptools)
-
 # Loading and plotting the polygon "kent"
 polyg2 <- readOGR(dsn="kent")
 plot(polyg2)
@@ -138,8 +131,8 @@ points(sett2, pch=19, cex=0.2)
 # Seeing if one find type dominates the data
 library(dplyr)
 df <- data.frame(table(sett2$objecttype))
-df %>%
-  arrange(desc(Freq))
+head(df %>%
+  arrange(desc(Freq)))
 
 # Dividing data into "coin" and artifacts
 coin <- sett2[sett2$objecttype == "COIN", ]
@@ -188,6 +181,83 @@ b) Include the graphs for aoristic weighing (bar charts) and \
 c) for aoristic analysis with MC simulation (your choice of line, polygon “blocks colour” or boxplot charts), both for the overall and the seal matrices analyses.
 
 ```{r}
+library(devtools)
+library(archSeries)
+
+# Data
+mydata <- read.csv(file="dataset3.csv", header=TRUE, sep=",")
+head(mydata)
+
+# Renaming columns to comply with archSeries
+names(mydata)[names(mydata)=="fromdate"] <- "Start"
+names(mydata)[names(mydata)=="todate"] <- "End"
+
+# Coercing NA:s to zeros, then removing all the rows in which Start or End date is zero
+mydata[is.na(mydata)] <- 0
+mydata<-subset(mydata, Start!="0")
+mydata<-subset(mydata, End!="0")
+
+# Inspecting for typos in Start and End dates
+mydata$subtract <- (mydata$End - mydata$Start)
+mydata <- mydata[order(mydata$subtract),]
+head(mydata)
+
+# Deleting the typoed rows with earlier End date than Start date 
+mydata <- mydata[!mydata$subtract < 0, ]
+
+# Simplifying the data by selecting only the vectors we need for the analysis
+mydata <- mydata[,c("objecttype", "Start","End")]
+
+# Aoristic weighing + plot
+aorist<-aorist(mydata, start.date=1000, end.date=1600, bin.width=20)
+aorist.plot(aorist, opacity=80, ylab="Aoristic Sum")
+
+# Dividing data into "seal matrix" and other types
+seal <- mydata[mydata$objecttype == "SEAL MATRIX", ]
+notseal <- mydata[mydata$objecttype != "SEAL MATRIX", ]
+
+# Aoristic weighing + plot for seals
+aorist_seal<-aorist(seal, start.date=1000, end.date=1600, bin.width=20)
+aorist.plot(aorist_seal, opacity=80, ylab="Aoristic Sum for Seal Matrix")
+
+# Aoristic weighing + plot for other artifacts
+aorist_notseal<-aorist(notseal, start.date=1000, end.date=1600, bin.width=20)
+aorist.plot(aorist_notseal, opacity=80, ylab="Aoristic Sum for Other Artifacts")
+
+# Creating unique ID row for the MC simulation
+mydata$ID <- c(1:nrow(mydata))
+
+# Simulating distributions and plotting the results
+mydata_sim<-date.simulate(mydata, start.date=1000, end.date=1600, bin.width=20, reps=1000)
+
+lines.chron(mydata_sim)
+poly.chron(mydata_sim)
+box.chron(mydata_sim)
+
+# Applying Beta Distribution to same data just for fun (a=2 and b=2)
+mydata_sim2<-date.simulate(mydata, start.date=1000, end.date=1600, bin.width=20, reps=1000, a=2, b=2)
+
+lines.chron(mydata_sim2)
+poly.chron(mydata_sim2)
+box.chron(mydata_sim2)
+
+# Same for seals and other artifacts
+seal$ID <- c(1:nrow(coin))
+notseal$ID <- c(1:nrow(notcoin))
+
+# Seals MC simulation
+seal_sim<-date.simulate(seal, start.date=1000, end.date=1600, bin.width=20, reps=1000)
+
+lines.chron(seal_sim)
+poly.chron(seal_sim)
+box.chron(seal_sim)
+
+# Other finds MC simulation
+notseal_sim<-date.simulate(notseal, start.date=1000, end.date=1600, bin.width=20, reps=1000)
+
+lines.chron(notcoin_sim)
+poly.chron(notcoin_sim)
+box.chron(notcoin_sim)
 
 
 ```
