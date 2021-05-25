@@ -296,5 +296,53 @@ Perform cluster analysis on dataset 4.
 
 ```{r}
 
+library(tidyverse)
+
+# Cluster analysis (HCA): Single linkage
+HCA.single <- hclust(dist(PCA.st, method="euclid"), method="single")
+plot(HCA.single, main="Single Linkage")
+rect.hclust(peacock.single, k=5)
+
+# Average method (HCA) 
+HCA.ave <- hclust(dist(PCA.st, method="euclid"), method="ave")
+plot(HCA.ave, main="Average Linkage")
+rect.hclust(HCA.ave, k=5)
+
+# Wards method (HCA) 
+PCA.ward <- hclust(dist(PCA.st, method="euclid"), method="ward")
+plot(PCA.ward, main="Ward's method")
+rect.hclust(PCA.ward, k=5)
+
+# K-Means clustering
+set.seed(12)
+wss <- function(k) {
+kmeans(PCA.st, k)$tot.withinss }
+k.values <- 1:8
+wss_values <- map_dbl(k.values, wss)
+plot(k.values, wss_values,
+type="b", pch = 19, frame = FALSE,
+xlab="Number of clusters K",
+ylab="Total within-clusters sum of squares")
+
+# K-means partitioning
+K3 <- kmeans(PCA.st, centers=3)
+head(K3)
+
+mycols <- c("violet","red","blue")
+pairs(PCA.st, col=mycols[K3$cluster], pch=19, cex=0.5)
+
+# Plotting the height and diameter pair in better resolution
+plot(PCA.st[,1]~PCA.st[,2],pch=16,col=mycols[K3$cluster])
+
+# Trying to get the K3 colors to show in PCA
+library("factoextra")
+
+PCA_col <- as.data.frame(PCA.st)
+PCA_col$K3 <- K3$cluster
+head(PCA_col)
+
+res.pca <- prcomp(PCA_col[1:9], scale = F)
+fviz_pca_ind(res.pca, habillage = PCA_col$K3)
+
 
 ```
