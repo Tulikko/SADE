@@ -116,17 +116,17 @@ plot(dens, col=heat.colors(10))
 points(sett2, pch=19, cex=0.2)
 
 # Kernel Density Estimate (KDE) 2
-dens2 <- density(sp_sett2, sigma=10000, edge=TRUE, eps=500)
+dens2 <- density(sp_sett2, sigma=1000, edge=TRUE, eps=500)
 plot(dens2, col=heat.colors(10))
 points(sett2, pch=19, cex=0.2)
 
 # Kernel Density Estimate (KDE) 3
-dens3 <- density(sp_sett2, sigma=14000, edge=TRUE, eps=500)
+dens3 <- density(sp_sett2, sigma=5000, edge=TRUE, eps=500)
 plot(dens3, col=heat.colors(10))
 points(sett2, pch=19, cex=0.2)
 
 # Kernel Density Estimate (KDE) 4
-dens4 <- density(sp_sett2, sigma=50000, edge=TRUE, eps=500)
+dens4 <- density(sp_sett2, sigma=10000, edge=TRUE, eps=500)
 plot(dens4, col=heat.colors(10))
 points(sett2, pch=19, cex=0.2)
 
