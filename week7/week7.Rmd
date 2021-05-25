@@ -24,7 +24,6 @@ library(spatstat)
 library(maptools)
 library(GISTools)  
 
-
 # Loading and plotting the polygon "kent"
 polyg <- readOGR(dsn="kent")
 plot(polyg)
@@ -78,6 +77,64 @@ b) Perform kernel density analysis on the findspots, using a few different searc
 c) Also perform a relative risk surface analysis, using the object type “seal matrix”.
 
 ```{r}
+
+# Setting up WD and necessary libraries
+setwd("~/R/SADE/week7")
+library(rgdal)   
+library(raster)   
+library(spatstat) 
+library(maptools)
+library(GISTools)  
+
+# Loading and plotting the polygon "kent"
+polyg2 <- readOGR(dsn="kent")
+plot(polyg2)
+
+# Adding Digital Elevation Model to the plot to visualize topography
+dem <- raster("dem_england/dem_england_historic.tif")
+plot(dem, add=T, col=terrain.colors(15))
+
+# Adding the medieval object findspots as points to the plot
+sett2 <- readOGR(dsn="dataset2")
+points(sett2, pch=19, cex=0.2)
+
+# Omitting points that might fall outside of the polygon 
+sett2 <- sett2[polyg, ]
+
+# Inspecting how "dataset1" looks like
+head(sett2)
+summary(sett2)
+
+# Converting the data into spastat object for analysis
+sp_sett2 <- as.ppp(coordinates(sett),as.owin(polyg))
+
+# Computation to determine an “optimal” bandwidth (sigma)
+bw.diggle(sp_sett2)
+
+# Kernel Density Estimate (KDE) 1
+dens <- density(sp_sett2, sigma=14, edge=TRUE, eps=500)
+plot(dens, col=heat.colors(5))
+points(sett2, pch=19, cex=0.2)
+
+# Kernel Density Estimate (KDE) 2
+dens2 <- density(sp_sett2, sigma=10000, edge=TRUE, eps=500)
+plot(dens2, col=heat.colors(10))
+points(sett2, pch=19, cex=0.2)
+
+# Kernel Density Estimate (KDE) 3
+dens3 <- density(sp_sett2, sigma=14000, edge=TRUE, eps=500)
+plot(dens3, col=heat.colors(10))
+points(sett2, pch=19, cex=0.2)
+
+# Kernel Density Estimate (KDE) 4
+dens4 <- density(sp_sett2, sigma=50000, edge=TRUE, eps=500)
+plot(dens4, col=heat.colors(10))
+points(sett2, pch=19, cex=0.2)
+
+# Kernel Density Estimate (KDE) 4
+dens5 <- density(sp_sett2, sigma=100000, edge=TRUE, eps=500)
+plot(dens5, col=heat.colors(10))
+points(sett2, pch=19, cex=0.2)
 
 
 ```
