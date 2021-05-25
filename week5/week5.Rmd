@@ -25,7 +25,7 @@ boxplot(peacock[-c(12:13)], las=2)
 
 # Scaling the data
 peacock.std<-scale(peacock[1:11])
-peacock.std
+head(peacock.std)
 boxplot(peacock.std, las=2)
 
 # Summary statistics with agnes() command
@@ -41,7 +41,7 @@ rect.hclust(peacock.single, k=5)
 # Adding the assigned group as a column to the original data frame
 peacock.single.5<-cutree(peacock.single,k=5)
 peacock$single.5 <- peacock.single.5
-peacock
+head(peacock)
 
 # Cross-tabulating the new groups vector (groups 1-5) with the original "type" column (types A-E)
 # In our experimental groups, a few outliers dominate the "typing" (group 2 has 35 mills!)

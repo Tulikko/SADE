@@ -268,6 +268,25 @@ Perform PCA on dataset 4.
 
 ```{r}
 
+PCAdata <- read.csv(file="dataset4.csv", header=TRUE, sep=",")
+colnames(PCAdata)[colnames(PCAdata) == 'ï..Al'] <- 'Al'
+
+summary(PCAdata)
+boxplot(PCAdata)
+
+# Scaling
+PCA.st<-scale(PCAdata)
+head(PCA.st)
+
+# PCA
+PCA1 <- prcomp(PCA.st, center=T, scale=T)
+summary(PCA1)
+plot(PCA1)
+biplot(PCA1)
+
+# Using FactoMineR for PCA
+library("FactoMineR")
+PCA2 <-PCA(PCA.st)
 
 ```
 
