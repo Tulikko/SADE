@@ -180,8 +180,7 @@ a) Perform aoristic analysis on Dataset 3, both on the whole dataset and on just
 b) Include the graphs for aoristic weighing (bar charts) and \
 c) for aoristic analysis with MC simulation (your choice of line, polygon “blocks colour” or boxplot charts), both for the overall and the seal matrices analyses.
 
-```{r}
-
+```{r cache = FALSE}
 library(devtools)
 library(archSeries)
 
